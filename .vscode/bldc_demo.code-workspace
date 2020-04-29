@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
+		"terminal.integrated.shellArgs.windows": [
+			"-defterm",
+			"-mingw32",
+			"-no-start",
+			"-here"
+		],
+		"window.zoomLevel": 0,
+		"http.proxySupport": "off",
+		"workbench.iconTheme": "vscode-icons",
+		"workbench.editor.enablePreview": false,
+		"files.autoSave": "onFocusChange",
+		"files.associations": {
+			"pi_cale.h": "c",
+			"usart.h": "c",
+			"sys.h": "c",
+			"delay.h": "c"
+		}
+	}
+}

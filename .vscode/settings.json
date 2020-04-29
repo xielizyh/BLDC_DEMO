@@ -1,0 +1,33 @@
+{
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
+    "terminal.integrated.shellArgs.windows": [
+        "-defterm",
+        "-mingw32",
+        "-no-start",
+        "-here"
+    ],
+    "window.zoomLevel": 0,
+    "files.autoGuessEncoding": true,
+    "C_Cpp.updateChannel": "Insiders",
+    "http.proxySupport": "off",
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.editor.enablePreview": false,
+    "diffEditor.renderSideBySide": true,
+    "files.autoSave": "onFocusChange",
+    //"files.encoding": "gb2312",
+
+    "search.exclude": {
+        "**/*.o":true, 
+        "**/*.d":true,
+        "**/*.crf":true,
+        "OBJ/":true,
+        "USER/DebugConfig/":true,
+    },
+    "files.exclude": {
+        "**/*.o":true,
+        "**/*.d":true,
+        "**/*.crf":true,
+        "OBJ/":true,
+        "USER/DebugConfig/":true,
+    },
+}
