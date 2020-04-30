@@ -23,7 +23,12 @@
 			"sys.h": "c",
 			"delay.h": "c",
 			"queue.h": "c",
-			"app_debug_log.h": "c"
+			"app_debug_log.h": "c",
+			"bsp_debug_uart.h": "c",
+			"app_debug.h": "c",
+			"stdint.h": "c",
+			"stm32f4xx_usart.h": "c",
+			"string.h": "c"
 		}
 	}
 }

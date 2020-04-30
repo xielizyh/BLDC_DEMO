@@ -15,11 +15,11 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include "app_debug_log.h"
-#include "bsp_debug_log.h"
+#include "app_debug.h"
+#include "bsp_debug_uart.h"
 
 /* Private constants ---------------------------------------------------------*/
-#define LOG_DATA_MAX_SIZE LOG_BUFFER_MAX_SIZE
+#define LOG_DATA_MAX_SIZE UART_BUFFER_MAX_SIZE
 
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -65,7 +65,7 @@ void rtu_log_printf(const char *fmt, ...)
 
     if (p->size)
     {
-        bsp_debug_log_send((uint8_t*)p->buffer, p->size);
+        bsp_debug_uart_send((uint8_t*)p->buffer, p->size);
     }
     
     free(p);
@@ -115,19 +115,19 @@ uint32_t rtu_log_timestamp(void)
  *
  * @return          none
  *============================================================================*/
-void app_debug_log_task(void *pvParameters)
+void app_debug_task(void *pvParameters)
 {
 
 }
 
 /**=============================================================================
- * @brief           日志初始化
+ * @brief           调试初始化
  *
  * @param[in]       none
  *
  * @return          none
  *============================================================================*/
-void app_debug_log_init(void)
+void app_debug_init(void)
 {
-    bsp_debug_log_init(rtu_input.buffer);
+    bsp_debug_uart_init(rtu_input.buffer);
 }

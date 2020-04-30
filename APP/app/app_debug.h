@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file			app_debug_log.h
-  * @brief			app_debug_log header file
+  * @file			app_debug.h
+  * @brief			app_debug header file
   * @author			Xli
   * @email			xieliyzh@163.com
   * @version		1.0.0
@@ -11,8 +11,8 @@
 **/
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __APP_DEBUG_LOG_H_
-#define __APP_DEBUG_LOG_H_
+#ifndef __APP_DEBUG_H_
+#define __APP_DEBUG_H_
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
@@ -34,7 +34,7 @@ typedef enum {
     RTU_LOG_VERBOSE     /*!< Bigger chunks of debugging information, or frequent messages which can potentially flood the output. */
 }rtu_log_level_t;
 
-#define CONFIG_LOG_COLORS 1
+#define CONFIG_LOG_COLORS 1 /*!< 使能日志颜色 */
 /**
  * @brief Log color
  *
@@ -121,14 +121,13 @@ uint32_t rtu_log_timestamp(void);
 void rtu_log_printf(const char *fmt, ...);
 
 /**
- * @brief 
+ * @brief 调试初始化
  * 
  */
-void app_debug_log_init(void);
-
+void app_debug_init(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  /* __APP_DEBUG_LOG_H_ */
+#endif  /* __APP_DEBUG_H_ */

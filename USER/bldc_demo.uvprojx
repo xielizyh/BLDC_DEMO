@@ -186,7 +186,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\USER;..\FWLIB\inc;..\SYSTEM\sys;..\SYSTEM\usart</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\USER;..\FWLIB\inc;..\SYSTEM\sys;..\SYSTEM\usart;..\APP\app;..\APP\bsp</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -608,6 +608,18 @@
         </Group>
         <Group>
           <GroupName>APP</GroupName>
+          <Files>
+            <File>
+              <FileName>app_debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\app\app_debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_debug_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\bsp\bsp_debug_uart.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

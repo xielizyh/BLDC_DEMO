@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file			bsp_debug_log.c
-  * @brief			bsp_debug_log function
+  * @file			bsp_debug_uart.c
+  * @brief			bsp_debug_uart function
   * @author			Xli
   * @email			xieliyzh@163.com
   * @version		1.0.0
@@ -12,16 +12,18 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
-#include "bsp_debug_log.h"
+#include "bsp_debug_uart.h"
 #include "stm32f4xx.h" 
 #include "stm32f4xx_usart.h"
 
 
 /* Private constants ---------------------------------------------------------*/
+#define UART_TX_ENABLE_DMA	(1)
+
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-static uint8_t uart_tx_buffer[LOG_BUFFER_MAX_SIZE];
+static uint8_t uart_tx_buffer[UART_BUFFER_MAX_SIZE];
 
 /* Private function ----------------------------------------------------------*/
 
@@ -101,7 +103,7 @@ static void _dma_tx_init(void)
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&(USART1->DR);
 	DMA_InitStructure.DMA_Memory0BaseAddr =  (uint32_t)uart_tx_buffer;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;
-	DMA_InitStructure.DMA_BufferSize = LOG_BUFFER_MAX_SIZE;
+	DMA_InitStructure.DMA_BufferSize = UART_BUFFER_MAX_SIZE;
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable; 
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
@@ -147,7 +149,7 @@ static void _dma_rx_init(uint8_t *rx_buf)
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&(USART1->DR);		
 	DMA_InitStructure.DMA_Memory0BaseAddr =  (uint32_t)rx_buf;	
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;				
-	DMA_InitStructure.DMA_BufferSize = LOG_BUFFER_MAX_SIZE;					
+	DMA_InitStructure.DMA_BufferSize = UART_BUFFER_MAX_SIZE;					
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable; 	
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;					
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte; 
@@ -171,18 +173,17 @@ static void _dma_rx_init(uint8_t *rx_buf)
 }
 
 /**=============================================================================
- * @brief           Log 输出
+ * @brief           串口输出
  *
  * @param[in]       none
  *
  * @return          none
  *============================================================================*/
-int bsp_debug_log_send(uint8_t *pbuf, uint16_t size)
+int bsp_debug_uart_send(uint8_t *pbuf, uint16_t size)
 {
-
-#if 1
+#if UART_TX_ENABLE_DMA
     /* 参数校验 */
-	if (!pbuf || (size > LOG_BUFFER_MAX_SIZE)) return -1;
+	if (!pbuf || (size > UART_BUFFER_MAX_SIZE)) return -1;
     /* DMA非空闲 */
 	if (DMA_GetFlagStatus(DMA2_Stream7, DMA_FLAG_TCIF7) != RESET) return -1;
     
@@ -238,13 +239,13 @@ void DMA2_Stream7_IRQHandler(void)
 }
 
 /**=============================================================================
- * @brief           log init
+ * @brief           串口初始化
  *
  * @param[in]       none
  *
  * @return          none
  *============================================================================*/
-void bsp_debug_log_init(uint8_t *rx_buf)
+void bsp_debug_uart_init(uint8_t *rx_buf)
 {
     _uart_init();
     _dma_tx_init();
