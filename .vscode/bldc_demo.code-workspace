@@ -21,7 +21,9 @@
 			"pi_cale.h": "c",
 			"usart.h": "c",
 			"sys.h": "c",
-			"delay.h": "c"
+			"delay.h": "c",
+			"queue.h": "c",
+			"app_debug_log.h": "c"
 		}
 	}
 }

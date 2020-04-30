@@ -1,8 +1,7 @@
-
 /**
   ******************************************************************************
-  * @file			main.c
-  * @brief			main function
+  * @file			bsp_motor.c
+  * @brief			bsp_motor function
   * @author			Xli
   * @email			xieliyzh@163.com
   * @version		1.0.0
@@ -12,10 +11,7 @@
 **/
 
 /* Includes ------------------------------------------------------------------*/
-#include "sys.h"
-#include "delay.h"
-#include "usart.h"
-#include "app_debug_log.h"
+#include "err.h"
 
 /* Private constants ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -23,25 +19,28 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function ----------------------------------------------------------*/
 
-int main(void)
+/**=============================================================================
+ * @brief           PWM初始化
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+err_t _motor_pwm_init(void)
 {
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-	delay_init(168);
-	//uart_init(115200);
-    app_debug_log_init();
+    return ERR_NONE;
+}
 
-	while (1)
-	{
-		delay_ms(1000);
-		//printf("hello!\r\n");
-        RTU_LOGI("Info", "Hello world!");
-        delay_ms(100);
-        RTU_LOGW("Warning", "Hello world!");
-        delay_ms(100);
-        RTU_LOGE("Error", "Hello world!");
-        delay_ms(100);
-        RTU_LOGD("Debug", "Hello world!");
-	}
-	
-	//return 0;
+/**=============================================================================
+ * @brief           电机驱动初始化
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+err_t bsp_motor_init(void)
+{
+    _motor_pwm_init();
+
+    return ERR_NONE;
 }
