@@ -38,6 +38,7 @@ typedef uint32_t queue_elemtype_t;
 typedef struct {
     queue_elemtype_t data[QUEUE_LENGTH];    /*!< 数组作为队列的存储空间 */
     int front,rear; /*!< 队列头尾指针 */
+    int current_size;   /*!< 当前大小 */
 }queue_t;
 
 /* Exported variables ------------------------------------------------------- */

@@ -22,7 +22,7 @@ extern "C"{
 #endif
 
 /* Exported constants --------------------------------------------------------*/
-#define UART_BUFFER_MAX_SIZE        128
+#define UART_BUFFER_MAX_SIZE        64
 
 /* Exported macros -----------------------------------------------------------*/
 /* Exported typedef ----------------------------------------------------------*/

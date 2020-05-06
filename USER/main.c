@@ -37,13 +37,13 @@ int main(void)
 
 		delay_ms(10);
 
-        if (++cnt_1s >= 1000)
+        if (++cnt_1s >= 100)
         {
             cnt_1s = 0;
             RTU_LOGI("Info", "Hello world!");
-            // RTU_LOGW("Warning", "Hello world!");
-            // RTU_LOGE("Error", "Hello world!");
-            // RTU_LOGD("Debug", "Hello world!");            
+            RTU_LOGW("Warning", "Hello world!");
+            RTU_LOGE("Error", "Hello world!");
+            RTU_LOGD("Debug", "Hello world!");            
         }
 	}
 	
