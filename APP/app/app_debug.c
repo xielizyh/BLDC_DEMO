@@ -139,6 +139,18 @@ void app_debug_task(void *arg)
 }
 
 /**=============================================================================
+ * @brief           中断输入回调
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+static void rtu_input_callback(uint8_t *pbuf, uint16_t size)
+{
+    RTU_LOGI("info", "input data size = %d", size);
+}
+
+/**=============================================================================
  * @brief           调试初始化
  *
  * @param[in]       none
@@ -148,5 +160,5 @@ void app_debug_task(void *arg)
 void app_debug_init(void)
 {
     log_queue = queue_create();
-    bsp_debug_uart_init(rtu_input.buffer);
+    bsp_debug_uart_init(rtu_input_callback);
 }

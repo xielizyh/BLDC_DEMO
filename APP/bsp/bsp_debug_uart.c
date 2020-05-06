@@ -22,8 +22,18 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
+/**
+* @brief 串口接收
+*/
+typedef struct {
+	uint8_t buffer[UART_BUFFER_MAX_SIZE];		/*!< 接收缓存 */
+	uint16_t size;	/*!< 大小 */
+	bsp_debug_uart_rx_callback callback;	/*!< 接收回调 */
+}uart_rx_t;
+
 /* Private variables ---------------------------------------------------------*/
 static uint8_t uart_tx_buffer[UART_BUFFER_MAX_SIZE];
+static uart_rx_t uart_rx;
 
 /* Private function ----------------------------------------------------------*/
 
@@ -138,7 +148,7 @@ static void _dma_tx_init(void)
 static void _dma_rx_init(uint8_t *rx_buf)
 {
 	DMA_InitTypeDef DMA_InitStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;
+	//NVIC_InitTypeDef NVIC_InitStructure;
 	
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
 	
@@ -162,14 +172,17 @@ static void _dma_rx_init(uint8_t *rx_buf)
 	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;		
 	DMA_Init(DMA2_Stream2, &DMA_InitStructure);
 			
+	DMA_ITConfig(DMA2_Stream2, DMA_IT_TC, ENABLE);
+	
 	USART_DMACmd(USART1, USART_DMAReq_Rx, ENABLE);							
 	DMA_Cmd(DMA2_Stream2, ENABLE);											
-
+/*	DMA接收中断意味着数据接收满才会产生
 	NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream2_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
+*/	
 }
 
 /**=============================================================================
@@ -210,13 +223,42 @@ int bsp_debug_uart_send(uint8_t *pbuf, uint16_t size)
  *
  * @return          none
  *============================================================================*/
-// void USART1_IRQHandler(void)
-// {
-// 	if(USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)	/*!< 串口空闲中断 */
-// 	{
-// 		DMA_Cmd(DMA2_Stream2, DISABLE);
-// 	}
-// }
+void USART1_IRQHandler(void)
+{
+	if(USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)	/*!< 串口空闲中断 */
+	{
+		DMA_Cmd(DMA2_Stream2, DISABLE);
+		/* 清除空闲中断 */
+		USART1->SR;
+        USART1->DR;
+		/* 读取数据长度 */
+		uart_rx.size = UART_BUFFER_MAX_SIZE - DMA_GetCurrDataCounter(DMA2_Stream2);
+		uart_rx.callback(uart_rx.buffer, uart_rx.size);	/*!< 回调 */
+		DMA_ClearFlag(DMA2_Stream2, DMA_FLAG_TCIF2);
+		DMA_SetCurrDataCounter(DMA2_Stream2, UART_BUFFER_MAX_SIZE);
+		DMA_Cmd(DMA2_Stream2, ENABLE);
+	}
+}
+
+/**=============================================================================
+ * @brief           DMA接收完成中断
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+void DMA2_Stream2_IRQHandler(void)
+{
+	if(DMA_GetFlagStatus(DMA2_Stream2, DMA_FLAG_TCIF2)!=RESET)	    
+	{
+		DMA_Cmd(DMA2_Stream2, DISABLE);
+		DMA_ClearFlag(DMA2_Stream2, DMA_FLAG_TCIF2 | 					
+								    DMA_FLAG_FEIF2 | 				
+								    DMA_FLAG_DMEIF2| 				
+								    DMA_FLAG_TEIF2 | 				
+								    DMA_FLAG_HTIF2);										
+	}
+}
 
 /**=============================================================================
  * @brief           DMA发送完成中断
@@ -227,14 +269,15 @@ int bsp_debug_uart_send(uint8_t *pbuf, uint16_t size)
  *============================================================================*/
 void DMA2_Stream7_IRQHandler(void)
 {
-	if(DMA_GetFlagStatus(DMA2_Stream7,DMA_FLAG_TCIF7)!=RESET)	    
+	if(DMA_GetFlagStatus(DMA2_Stream7, DMA_FLAG_TCIF7)!=RESET)	    
 	{
-		DMA_Cmd(DMA2_Stream7,DISABLE);
-		DMA_ClearFlag(DMA2_Stream7,DMA_FLAG_TCIF7| 					
-								   DMA_FLAG_FEIF7 | 				
-								   DMA_FLAG_DMEIF7| 				
-								   DMA_FLAG_TEIF7 | 				
-								   DMA_FLAG_HTIF7);										
+		DMA_Cmd(DMA2_Stream7, DISABLE);
+		DMA_ClearFlag(DMA2_Stream7, DMA_FLAG_TCIF7 | 					
+								    DMA_FLAG_FEIF7 | 				
+								    DMA_FLAG_DMEIF7| 				
+								    DMA_FLAG_TEIF7 | 				
+								    DMA_FLAG_HTIF7);
+												
 	}
 }
 
@@ -245,9 +288,11 @@ void DMA2_Stream7_IRQHandler(void)
  *
  * @return          none
  *============================================================================*/
-void bsp_debug_uart_init(uint8_t *rx_buf)
+void bsp_debug_uart_init(bsp_debug_uart_rx_callback recv_cb)
 {
     _uart_init();
     _dma_tx_init();
-    //_dma_rx_init(rx_buf);
+
+	uart_rx.callback = recv_cb;
+    _dma_rx_init(uart_rx.buffer);
 }

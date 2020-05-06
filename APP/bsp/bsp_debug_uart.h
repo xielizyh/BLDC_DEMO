@@ -26,10 +26,16 @@ extern "C"{
 
 /* Exported macros -----------------------------------------------------------*/
 /* Exported typedef ----------------------------------------------------------*/
+/**
+ * @brief 串口接收数据回调
+ * 
+ */
+typedef void (*bsp_debug_uart_rx_callback)(uint8_t *, uint16_t);
+
 /* Exported variables ------------------------------------------------------- */
 /* Exported functions ------------------------------------------------------- */
 int bsp_debug_uart_send(uint8_t *pbuf, uint16_t size);
-void bsp_debug_uart_init(uint8_t *rx_buf);
+void bsp_debug_uart_init(bsp_debug_uart_rx_callback recv_cb);
 
 #ifdef __cplusplus
 }
