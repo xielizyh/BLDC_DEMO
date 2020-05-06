@@ -1,47 +1,53 @@
-/*
- * queue.h
- *
- *  Created on: Feb 4, 2018
- *      Author: qyz
+/**
+  ******************************************************************************
+  * @file			queue.h
+  * @brief			queue header file
+  * @author			Xli
+  * @email			xieliyzh@163.com
+  * @version		1.0.0
+  * @date			2020-05-06
+  * @copyright		2020, XLI Co.,Ltd. All rights reserved
+  ******************************************************************************
+**/
+
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __QUEUE_H_
+#define __QUEUE_H_
+
+/* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+/* Exported constants --------------------------------------------------------*/
+#define QUEUE_LENGTH    4    /*!< é˜Ÿåˆ—é•¿åº¦ */
+
+/* Exported macros -----------------------------------------------------------*/
+/* Exported typedef ----------------------------------------------------------*/
+/**
+ * @brief é˜Ÿåˆ—å…ƒç´ çš„æ•°æ®ç±»åž‹
+ * 
  */
+typedef uint32_t queue_elemtype_t;
 
-#ifndef QUEUE_H_
-#define QUEUE_H_
+/**
+* @brief é˜Ÿåˆ—å®šä¹‰
+*/
+typedef struct {
+    queue_elemtype_t data[QUEUE_LENGTH];    /*!< æ•°ç»„ä½œä¸ºé˜Ÿåˆ—çš„å­˜å‚¨ç©ºé—´ */
+    int front,rear; /*!< é˜Ÿåˆ—å¤´å°¾æŒ‡é’ˆ */
+}queue_t;
 
-#include "stdio.h"
+/* Exported variables ------------------------------------------------------- */
+/* Exported functions ------------------------------------------------------- */
+queue_t* queue_create(void);
+int queue_send(queue_t *queue, const void *item);
+int queue_receive(queue_t *queue, void *buffer);
 
+#ifdef __cplusplus
+}
+#endif
 
-#define queue_lenth 3  /*¶ÓÁÐ³¤¶È*/
-#define queue_size  64 /*¶ÓÁÐÊý¾Ý´óÐ¡*/
-
-
-typedef struct 
-{
-    /** @brief Òª·¢ËÍµÄ»º³åÇø */
-    char buffer[queue_size];
-    /** @brief Òª·¢ËÍµÄÊý¾Ý³¤¶È */
-    int size;
-}queue_struct;
-
-
-typedef queue_struct data_t;  
-
-typedef struct  
-{  
-    data_t data[queue_lenth];
-    int front,rear,size;
-}Queue_t; 
-
-
-
-void QueueCreate(Queue_t *queue); 
-void QueueDestroy(Queue_t *queue);
-void QueueClear(Queue_t *queue);
-int QueueIsEmpty(Queue_t *queue);
-int QueueIsFull(Queue_t *queue);
-int QueueGetLenth(Queue_t *queue);
-int QueueSend(Queue_t *queue,data_t *ItemToQueue);
-int QueueReceive(Queue_t *queue,data_t *pvBuffer);
-
-
-#endif /* QUEUE_H_ */
+#endif  /* __QUEUE_H_ */

@@ -125,6 +125,7 @@ void rtu_log_printf(const char *fmt, ...);
  * 
  */
 void app_debug_init(void);
+void app_debug_task(void *arg);
 
 #ifdef __cplusplus
 }

@@ -18,8 +18,11 @@
 #include "app_debug.h"
 #include "bsp_debug_uart.h"
 
+#include "queue.h"
+
 /* Private constants ---------------------------------------------------------*/
-#define LOG_DATA_MAX_SIZE UART_BUFFER_MAX_SIZE
+#define RTU_OUTPUT_DATA_MAX_SIZE UART_BUFFER_MAX_SIZE    /*!< 终端输出最大缓冲长度 */
+#define RTU_INPUT_DATA_MAX_SIZE UART_BUFFER_MAX_SIZE     /*!< 终端输入最大缓冲长度 */
 
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -28,8 +31,8 @@
  * 
  */
 typedef struct {
-    uint8_t buffer[LOG_DATA_MAX_SIZE];
-    uint16_t size;
+    uint8_t buffer[RTU_OUTPUT_DATA_MAX_SIZE];
+    int size;
 }rtu_output_t;
 
 /**
@@ -37,13 +40,14 @@ typedef struct {
  * 
  */
 typedef struct {
-    uint8_t buffer[LOG_DATA_MAX_SIZE];
-    uint16_t size;
+    uint8_t buffer[RTU_INPUT_DATA_MAX_SIZE];
+    int size;
 }rtu_input_t;
 
 /* Private variables ---------------------------------------------------------*/
 static rtu_log_level_t log_local_level = RTU_LOG_VERBOSE;
 static rtu_input_t rtu_input;
+static queue_t *log_queue = NULL;
 
 /* Private function ----------------------------------------------------------*/
 /**=============================================================================
@@ -60,14 +64,19 @@ void rtu_log_printf(const char *fmt, ...)
     
     va_list arg;
     va_start(arg, fmt);
-    p->size = vsnprintf((char*)p->buffer, sizeof(rtu_output_t), fmt, arg);
+    p->size = vsnprintf((char*)p->buffer, RTU_OUTPUT_DATA_MAX_SIZE, fmt, arg);
     va_end(arg);
+    //assert_param(p->size < RTU_OUTPUT_DATA_MAX_SIZE);
 
     if (p->size)
     {
-        bsp_debug_uart_send((uint8_t*)p->buffer, p->size);
+        //bsp_debug_uart_send((uint8_t*)p->buffer, p->size);
+        uint32_t pbuf = 0;
+        pbuf = (uint32_t)p;
+        if (queue_send(log_queue, &pbuf) != 0)   goto exit;/*!< 发送失败，释放内存 */
+        return;
     }
-    
+exit:   
     free(p);
     p = NULL;
 }
@@ -115,9 +124,18 @@ uint32_t rtu_log_timestamp(void)
  *
  * @return          none
  *============================================================================*/
-void app_debug_task(void *pvParameters)
+void app_debug_task(void *arg)
 {
-
+    uint32_t pbuf = 0;
+    rtu_output_t *p = NULL;
+    
+    if (queue_receive(log_queue, &pbuf) == 0)   /*!< 接收成功 */
+    {
+        p = (rtu_output_t*)pbuf;
+        bsp_debug_uart_send((uint8_t*)p->buffer, p->size);
+        free(p);
+        p = NULL;
+    }
 }
 
 /**=============================================================================
@@ -129,5 +147,6 @@ void app_debug_task(void *pvParameters)
  *============================================================================*/
 void app_debug_init(void)
 {
+    log_queue = queue_create();
     bsp_debug_uart_init(rtu_input.buffer);
 }

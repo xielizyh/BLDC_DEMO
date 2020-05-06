@@ -17,7 +17,7 @@
     //"files.encoding": "gb2312",
 
     "search.exclude": {
-        ".gitignore":true,
+        //".gitignore":true,
         "*.bat":true,
         "**/*.o":true, 
         "**/*.d":true,
@@ -26,7 +26,7 @@
         "USER/DebugConfig/":true,
     },
     "files.exclude": {
-        ".gitignore":true,
+        //".gitignore":true,
         "*.bat":true,
         "**/*.o":true,
         "**/*.d":true,
