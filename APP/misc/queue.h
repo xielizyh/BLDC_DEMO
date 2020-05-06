@@ -23,6 +23,7 @@ extern "C"{
 
 /* Exported constants --------------------------------------------------------*/
 #define QUEUE_LENGTH    4    /*!< 队列长度 */
+#define QUEUE_ITEM_SIZE 4    /*!< 队列项大小 */   
 
 /* Exported macros -----------------------------------------------------------*/
 /* Exported typedef ----------------------------------------------------------*/
@@ -30,7 +31,10 @@ extern "C"{
  * @brief 队列元素的数据类型
  * 
  */
-typedef uint32_t queue_elemtype_t;
+//typedef uint32_t queue_elemtype_t;
+typedef struct {
+    char buffer[QUEUE_ITEM_SIZE];
+}queue_elemtype_t;
 
 /**
 * @brief 队列定义
