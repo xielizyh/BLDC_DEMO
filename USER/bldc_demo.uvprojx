@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\USER;..\FWLIB\inc;..\SYSTEM\sys;..\SYSTEM\usart;..\APP\app;..\APP\bsp</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\USER;..\FWLIB\inc;..\SYSTEM\sys;..\SYSTEM\usart;..\APP\app;..\APP\bsp;..\APP\misc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -575,11 +575,6 @@
               <FilePath>..\SYSTEM\delay\delay.c</FilePath>
             </File>
             <File>
-              <FileName>usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SYSTEM\usart\usart.c</FilePath>
-            </File>
-            <File>
               <FileName>sys.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SYSTEM\sys\sys.c</FilePath>
@@ -614,10 +609,25 @@
               <FileType>1</FileType>
               <FilePath>..\APP\app\app_debug.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>BSP</GroupName>
+          <Files>
             <File>
               <FileName>bsp_debug_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\bsp\bsp_debug_uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MISC</GroupName>
+          <Files>
+            <File>
+              <FileName>queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\misc\queue.c</FilePath>
             </File>
           </Files>
         </Group>

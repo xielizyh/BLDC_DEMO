@@ -12,39 +12,39 @@
 **/
 
 /* Includes ------------------------------------------------------------------*/
-#include "sys.h"
-#include "delay.h"
-#include "usart.h"
+#include <stdio.h>
+#include "stm32f4xx.h" 
 #include "app_debug.h"
+#include "app_task.h"
 
 /* Private constants ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function ----------------------------------------------------------*/
+#if 0
+__asm void wait()
+{
+delay
+    ldr r0, =0xFFFFFF 
+delay_loop
+    sub r0, r0, #1
+    mov r2, #0
+    cmp r0, r2 
+    bne delay_loop 
+    mov pc, lr
+}
+#endif
 
 int main(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-	delay_init(168);
-	//uart_init(115200);
+    systick_init();
     app_debug_init();
 
-	uint16_t cnt_1s = 0;
     while (1)
 	{
         app_debug_task(NULL);
-
-		delay_ms(10);
-
-        if (++cnt_1s >= 100)
-        {
-            cnt_1s = 0;
-            // RTU_LOGI("Info", "Hello world!");
-            // RTU_LOGW("Warning", "Hello world!");
-            // RTU_LOGE("Error", "Hello world!");
-            // RTU_LOGD("Debug", "Hello world!");            
-        }
 	}
 	
 	//return 0;

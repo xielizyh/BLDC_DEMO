@@ -8,7 +8,7 @@
 //µÁª˙øÿ÷∆¥“…” œ‰£∫JXKJ_2007@163.com
 //############################################################
 #include "stm32f4xx_it.h"
- 
+#include "bsp_systick.h" 
 
 /** @addtogroup Template_Project
   * @{
@@ -120,7 +120,7 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
- 
+    systick_handler();
 }
 
 /******************************************************************************/

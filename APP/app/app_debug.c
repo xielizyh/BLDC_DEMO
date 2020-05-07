@@ -17,8 +17,9 @@
 
 #include "app_debug.h"
 #include "bsp_debug_uart.h"
-
 #include "queue.h"
+
+#include "bsp_systick.h"
 
 /* Private constants ---------------------------------------------------------*/
 #define RTU_OUTPUT_DATA_MAX_SIZE UART_BUFFER_MAX_SIZE    /*!< 终端输出最大缓冲长度 */
@@ -114,7 +115,7 @@ void rtu_log_level_set(rtu_log_level_t level)
  *============================================================================*/
 uint32_t rtu_log_timestamp(void)
 {
-    return 0;
+    return sys_time_get();
 }
 
 /**=============================================================================

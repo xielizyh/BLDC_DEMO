@@ -22,6 +22,12 @@ extern "C"{
 #endif
 
 /**
+ * @brief 日志标签
+ * 
+ */
+#define LOG_TAG   __func__
+
+/**
  * @brief Log level
  *
  */
