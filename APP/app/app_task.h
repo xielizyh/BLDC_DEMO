@@ -26,7 +26,8 @@ extern "C"{
 /* Exported variables ------------------------------------------------------- */
 /* Exported functions ------------------------------------------------------- */
 void systick_init(void);
-
+void app_task_poll(void);
+void TEST_CASE_TASK(void *arg);
 #ifdef __cplusplus
 }
 #endif

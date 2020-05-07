@@ -113,21 +113,22 @@ static void _dma_tx_init(void)
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&(USART1->DR);
 	DMA_InitStructure.DMA_Memory0BaseAddr =  (uint32_t)uart_tx_buffer;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;
-	DMA_InitStructure.DMA_BufferSize = UART_BUFFER_MAX_SIZE;
+	DMA_InitStructure.DMA_BufferSize = /*UART_BUFFER_MAX_SIZE*/0;		/*!< 初始化填0 */
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable; 
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
 	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
 	DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
 	DMA_InitStructure.DMA_Priority = DMA_Priority_Medium;
-	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;         
-	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
+	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable/*DMA_FIFOMode_Enable*/;         
+	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
 	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
 	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
 	DMA_Init(DMA2_Stream7, &DMA_InitStructure);
 	
 	DMA_ITConfig(DMA2_Stream7, DMA_IT_TC, ENABLE);
 	
+	//DMA_SetCurrDataCounter(DMA2_Stream7, 0);
 	USART_DMACmd(USART1, USART_DMAReq_Tx, ENABLE);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream7_IRQn;
@@ -198,7 +199,8 @@ int bsp_debug_uart_send(uint8_t *pbuf, uint16_t size)
     /* 参数校验 */
 	if (!pbuf || (size > UART_BUFFER_MAX_SIZE)) return -1;
     /* DMA非空闲 */
-	if (DMA_GetFlagStatus(DMA2_Stream7, DMA_FLAG_TCIF7) != RESET) return -1;
+	//if (DMA_GetFlagStatus(DMA2_Stream7, DMA_FLAG_TCIF7) != RESET) return -1;
+	if (DMA_GetCurrDataCounter(DMA2_Stream7) != 0)	return -1;
     
     /* 拷贝发送数据 */
 	memcpy(uart_tx_buffer, pbuf, size);
@@ -252,11 +254,7 @@ void DMA2_Stream2_IRQHandler(void)
 	if(DMA_GetFlagStatus(DMA2_Stream2, DMA_FLAG_TCIF2)!=RESET)	    
 	{
 		DMA_Cmd(DMA2_Stream2, DISABLE);
-		DMA_ClearFlag(DMA2_Stream2, DMA_FLAG_TCIF2 | 					
-								    DMA_FLAG_FEIF2 | 				
-								    DMA_FLAG_DMEIF2| 				
-								    DMA_FLAG_TEIF2 | 				
-								    DMA_FLAG_HTIF2);										
+		DMA_ClearFlag(DMA2_Stream2, DMA_FLAG_TCIF2);										
 	}
 }
 
@@ -272,11 +270,7 @@ void DMA2_Stream7_IRQHandler(void)
 	if(DMA_GetFlagStatus(DMA2_Stream7, DMA_FLAG_TCIF7)!=RESET)	    
 	{
 		DMA_Cmd(DMA2_Stream7, DISABLE);
-		DMA_ClearFlag(DMA2_Stream7, DMA_FLAG_TCIF7 | 					
-								    DMA_FLAG_FEIF7 | 				
-								    DMA_FLAG_DMEIF7| 				
-								    DMA_FLAG_TEIF7 | 				
-								    DMA_FLAG_HTIF7);
+		DMA_ClearFlag(DMA2_Stream7, DMA_FLAG_TCIF7);
 												
 	}
 }

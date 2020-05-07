@@ -22,7 +22,7 @@ extern "C"{
 #endif
 
 /* Exported constants --------------------------------------------------------*/
-#define QUEUE_LENGTH    4    /*!< 队列长度 */
+#define QUEUE_LENGTH    8    /*!< 队列长度 */
 #define QUEUE_ITEM_SIZE 4    /*!< 队列项大小 */   
 
 /* Exported macros -----------------------------------------------------------*/

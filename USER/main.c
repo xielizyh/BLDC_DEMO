@@ -44,7 +44,7 @@ int main(void)
 
     while (1)
 	{
-        app_debug_task(NULL);
+        app_task_poll();
 	}
 	
 	//return 0;

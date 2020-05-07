@@ -47,7 +47,7 @@ typedef struct {
 
 /* Private variables ---------------------------------------------------------*/
 static rtu_log_level_t log_local_level = RTU_LOG_VERBOSE;
-static rtu_input_t rtu_input;
+//static rtu_input_t rtu_input;
 static queue_t *log_queue = NULL;
 
 /* Private function ----------------------------------------------------------*/
@@ -119,7 +119,7 @@ uint32_t rtu_log_timestamp(void)
 }
 
 /**=============================================================================
- * @brief           
+ * @brief           调试任务
  *
  * @param[in]       none
  *
@@ -133,7 +133,12 @@ void app_debug_task(void *arg)
     if (queue_receive(log_queue, &pbuf) == 0)   /*!< 接收成功 */
     {
         p = (rtu_output_t*)pbuf;
-        bsp_debug_uart_send((uint8_t*)p->buffer, p->size);
+        int ret = bsp_debug_uart_send((uint8_t*)p->buffer, p->size);
+        if (ret != 0)
+        {
+            RTU_LOGE(LOG_TAG, "uart send error=%d", ret);
+        }
+        
         free(p);
         p = NULL;
     }
