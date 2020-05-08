@@ -11,10 +11,11 @@
 **/
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdio.h>
 #include "app_task.h"
 #include "bsp_systick.h"
 #include "app_debug.h"
-#include <stdio.h>
+#include "app_key.h"
 
 /* Private constants ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -38,7 +39,7 @@ typedef struct {
  */
 static _task_blk_t _task_list[] = {
     {0, 0, 1, app_debug_task},
-    {0, 0, 1000, TEST_CASE_TASK},
+    {0, 0, 10, app_key_task},
 };
 
 /* Private function ----------------------------------------------------------*/

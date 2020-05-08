@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file			bsp_motor.h
-  * @brief			bsp_motor header file
+  * @file			bsp_motor_drv.h
+  * @brief			bsp_motor_drv header file
   * @author			Xli
   * @email			xieliyzh@163.com
   * @version		1.0.0
@@ -11,8 +11,8 @@
 **/
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __BSP_MOTOR_H_
-#define __BSP_MOTOR_H_
+#ifndef __BSP_MOTOR_DRV_H_
+#define __BSP_MOTOR_DRV_H_
 
 /* Includes ------------------------------------------------------------------*/
 
@@ -30,4 +30,4 @@ extern "C"{
 }
 #endif
 
-#endif  /* __BSP_MOTOR_H_ */
+#endif  /* __BSP_MOTOR_DRV_H_ */
