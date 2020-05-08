@@ -187,6 +187,22 @@ static void _dma_rx_init(uint8_t *rx_buf)
 }
 
 /**=============================================================================
+ * @brief           串口是否正在发送
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+uint8_t bsp_debug_uart_is_transferring(void)
+{
+#if UART_TX_ENABLE_DMA
+	return (DMA_GetCurrDataCounter(DMA2_Stream7) != 0);
+#else
+	return 0;
+#endif	
+}
+
+/**=============================================================================
  * @brief           串口输出
  *
  * @param[in]       none
@@ -199,7 +215,6 @@ int bsp_debug_uart_send(uint8_t *pbuf, uint16_t size)
     /* 参数校验 */
 	if (!pbuf || (size > UART_BUFFER_MAX_SIZE)) return -1;
     /* DMA非空闲 */
-	//if (DMA_GetFlagStatus(DMA2_Stream7, DMA_FLAG_TCIF7) != RESET) return -1;
 	if (DMA_GetCurrDataCounter(DMA2_Stream7) != 0)	return -1;
     
     /* 拷贝发送数据 */
@@ -251,7 +266,7 @@ void USART1_IRQHandler(void)
  *============================================================================*/
 void DMA2_Stream2_IRQHandler(void)
 {
-	if(DMA_GetFlagStatus(DMA2_Stream2, DMA_FLAG_TCIF2)!=RESET)	    
+	if(DMA_GetFlagStatus(DMA2_Stream2, DMA_FLAG_TCIF2) != RESET)	    
 	{
 		DMA_Cmd(DMA2_Stream2, DISABLE);
 		DMA_ClearFlag(DMA2_Stream2, DMA_FLAG_TCIF2);										
@@ -267,11 +282,11 @@ void DMA2_Stream2_IRQHandler(void)
  *============================================================================*/
 void DMA2_Stream7_IRQHandler(void)
 {
-	if(DMA_GetFlagStatus(DMA2_Stream7, DMA_FLAG_TCIF7)!=RESET)	    
+	/* TCIF7不代表是否正在传输:0->无传输完成事件;1->发送传输完成事件 */
+	if(DMA_GetFlagStatus(DMA2_Stream7, DMA_FLAG_TCIF7)!= RESET)	    
 	{
 		DMA_Cmd(DMA2_Stream7, DISABLE);
-		DMA_ClearFlag(DMA2_Stream7, DMA_FLAG_TCIF7);
-												
+		DMA_ClearFlag(DMA2_Stream7, DMA_FLAG_TCIF7);									
 	}
 }
 

@@ -127,6 +127,9 @@ uint32_t rtu_log_timestamp(void)
  *============================================================================*/
 void app_debug_task(void *arg)
 {
+    /* 先判断上次串口是否正在传输 */
+    if (bsp_debug_uart_is_transferring()) return;
+
     uint32_t pbuf = 0;
     rtu_output_t *p = NULL;
     

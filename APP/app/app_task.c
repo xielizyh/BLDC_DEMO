@@ -37,7 +37,7 @@ typedef struct {
  * 
  */
 static _task_blk_t _task_list[] = {
-    {0, 0, 10, app_debug_task},
+    {0, 0, 1, app_debug_task},
     {0, 0, 1000, TEST_CASE_TASK},
 };
 

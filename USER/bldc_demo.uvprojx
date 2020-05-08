@@ -570,11 +570,6 @@
           <GroupName>SYSTEM</GroupName>
           <Files>
             <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SYSTEM\delay\delay.c</FilePath>
-            </File>
-            <File>
               <FileName>sys.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SYSTEM\sys\sys.c</FilePath>
@@ -609,6 +604,11 @@
               <FileType>1</FileType>
               <FilePath>..\APP\app\app_debug.c</FilePath>
             </File>
+            <File>
+              <FileName>app_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\app\app_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -618,6 +618,11 @@
               <FileName>bsp_debug_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\bsp\bsp_debug_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\bsp\bsp_systick.c</FilePath>
             </File>
           </Files>
         </Group>

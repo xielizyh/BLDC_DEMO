@@ -34,6 +34,7 @@ typedef void (*bsp_debug_uart_rx_callback)(uint8_t *, uint16_t);
 
 /* Exported variables ------------------------------------------------------- */
 /* Exported functions ------------------------------------------------------- */
+uint8_t bsp_debug_uart_is_transferring(void);
 int bsp_debug_uart_send(uint8_t *pbuf, uint16_t size);
 void bsp_debug_uart_init(bsp_debug_uart_rx_callback recv_cb);
 
