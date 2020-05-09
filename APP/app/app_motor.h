@@ -25,6 +25,8 @@ extern "C"{
 /* Exported typedef ----------------------------------------------------------*/
 /* Exported variables ------------------------------------------------------- */
 /* Exported functions ------------------------------------------------------- */
+void app_motor_task(void *arg);
+void app_motor_init(void);
 
 #ifdef __cplusplus
 }

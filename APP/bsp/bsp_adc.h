@@ -15,6 +15,7 @@
 #define __BSP_ADC_H_
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C"{
@@ -32,11 +33,12 @@ typedef enum {
     BSP_ADC_PHASE_W_CUR,		/*!< W相电流 */
     BSP_ADC_BUS_VOL,		    /*!< 总线电压 */
     BSP_ADC_POT_VOL,		    /*!< 端子电压 */
-    BSP_ADC_NUM_MAX,
+    BSP_ADC_NUM_MAX
 }bsp_adc_num_t;
 
 /* Exported variables ------------------------------------------------------- */
 /* Exported functions ------------------------------------------------------- */
+void bsp_adc_init(uint16_t *sample_buf);
 
 #ifdef __cplusplus
 }

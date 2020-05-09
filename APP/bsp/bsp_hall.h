@@ -15,6 +15,7 @@
 #define __BSP_HALL_H_
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C"{
@@ -23,8 +24,19 @@ extern "C"{
 /* Exported constants --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* Exported typedef ----------------------------------------------------------*/
+/**
+ * @brief 按键索引定义
+ */
+typedef enum{
+    BSP_HALL_A,
+    BSP_HALL_B,
+    BSP_HALL_C,
+    BSP_HALL_MAX,
+}bsp_hall_num_t;
+
 /* Exported variables ------------------------------------------------------- */
 /* Exported functions ------------------------------------------------------- */
+uint8_t bsp_hall_get_level(uint8_t idx);
 void bsp_hall_init(void);
 
 #ifdef __cplusplus

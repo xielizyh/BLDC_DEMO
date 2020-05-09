@@ -16,6 +16,7 @@
 #include "bsp_systick.h"
 #include "app_debug.h"
 #include "app_key.h"
+#include "app_motor.h"
 
 /* Private constants ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -40,6 +41,7 @@ typedef struct {
 static _task_blk_t _task_list[] = {
     {0, 0, 1, app_debug_task},
     {0, 0, 10, app_key_task},
+    {0, 0, 10000, app_motor_task},
 };
 
 /* Private function ----------------------------------------------------------*/

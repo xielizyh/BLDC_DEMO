@@ -17,6 +17,7 @@
 #include "app_debug.h"
 #include "app_task.h"
 #include "app_key.h"
+#include "app_motor.h"
 
 /* Private constants ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -43,6 +44,7 @@ int main(void)
     systick_init();
     app_debug_init();
     app_key_init();
+    app_motor_init();
 
     while (1)
 	{

@@ -10,6 +10,19 @@
   ******************************************************************************
 **/
 
+/* Figure --------------------------------------------------------------------*/
+/*  逆变电路编号
+		   -------------------------------------
+		   |			  |				   |
+	1-----||	   2-----||			3-----||
+		   |			  | 			   |
+		   |---U		  |---V			   |---W
+		   |			  |				   |
+	4-----||	   5-----||			6-----||
+		   |			  |    			   |
+		   -------------------------------------
+*/
+
 /* Includes ------------------------------------------------------------------*/
 #include "bsp_motor_drv.h"
 #include "stm32f4xx.h" 
@@ -29,6 +42,8 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+static bsp_motor_it_update_callback _motor_it_update_cb;
+
 /* Private function ----------------------------------------------------------*/
 
 /**=============================================================================
@@ -82,7 +97,8 @@ static void _motor_pwm_init(void)
     /* 定时器初始化 */
     TIM_TimeBaseStructure.TIM_Prescaler = 0;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_TimeBaseStructure.TIM_Period = (168000 / PWM_PREQ) - 1;
+    TIM_TimeBaseStructure.TIM_Period = (168000 / PWM_PREQ) - 1; /*!< 10500=16K */
+    //TIM_TimeBaseStructure.TIM_Period = 10000; /*!< 10000=16.8K */
     TIM_TimeBaseStructure.TIM_ClockDivision = 0;
     TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
     TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
@@ -131,14 +147,202 @@ static void _motor_pwm_init(void)
 }
 
 /**=============================================================================
+ * @brief           定时器更新中断
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+void TIM1_UP_TIM10_IRQHandler(void)
+{
+    //TIM_ClearFlag(TIM1, TIM_FLAG_Update);
+    if (TIM_GetITStatus(TIM3,TIM_IT_Update) != RESET)    /*!< 溢出中断 */
+    {
+        TIM_ClearITPendingBit(TIM1, TIM_IT_Update); 
+        _motor_it_update_cb();
+    }
+}
+
+/**=============================================================================
+ * @brief           六步换相
+ *
+ * @param[in]       duty:占空比
+ *
+ * @return          none
+ *============================================================================*/
+void bsp_motor_MOS_Q51PWM(uint8_t duty)
+{
+    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    
+    TIM_SetCompare2(TIM1, 0);
+    TIM_SetCompare3(TIM1, 0);
+    TIM_SetCompare1(TIM1, compare);
+
+    GPIO_ResetBits(GPIOB, PHASE_UL_GPIO_PIN); 
+    GPIO_ResetBits(GPIOB, PHASE_WL_GPIO_PIN);
+    GPIO_SetBits(GPIOB, PHASE_VL_GPIO_PIN);
+}
+
+/**=============================================================================
+ * @brief           六步换相
+ *
+ * @param[in]       duty:占空比
+ *
+ * @return          none
+ *============================================================================*/
+void bsp_motor_MOS_Q16PWM(uint8_t duty)
+{
+    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    
+    TIM_SetCompare2(TIM1, 0);
+    TIM_SetCompare3(TIM1, 0);
+    TIM_SetCompare1(TIM1, compare);
+
+    GPIO_ResetBits(GPIOB, PHASE_UL_GPIO_PIN); 
+    GPIO_ResetBits(GPIOB, PHASE_VL_GPIO_PIN);
+    GPIO_SetBits(GPIOB, PHASE_WL_GPIO_PIN);
+}
+
+/**=============================================================================
+ * @brief           六步换相
+ *
+ * @param[in]       duty:占空比
+ *
+ * @return          none
+ *============================================================================*/
+void bsp_motor_MOS_Q62PWM(uint8_t duty)
+{
+    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    
+    TIM_SetCompare1(TIM1, 0);
+    TIM_SetCompare3(TIM1, 0);
+    TIM_SetCompare2(TIM1, compare);
+
+    GPIO_ResetBits(GPIOB, PHASE_UL_GPIO_PIN); 
+    GPIO_ResetBits(GPIOB, PHASE_VL_GPIO_PIN);
+    GPIO_SetBits(GPIOB, PHASE_WL_GPIO_PIN);
+}
+
+/**=============================================================================
+ * @brief           六步换相
+ *
+ * @param[in]       duty:占空比
+ *
+ * @return          none
+ *============================================================================*/
+void bsp_motor_MOS_Q24PWM(uint8_t duty)
+{
+    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    
+    TIM_SetCompare1(TIM1, 0);
+    TIM_SetCompare3(TIM1, 0);
+    TIM_SetCompare2(TIM1, compare);
+
+    GPIO_ResetBits(GPIOB, PHASE_VL_GPIO_PIN); 
+    GPIO_ResetBits(GPIOB, PHASE_WL_GPIO_PIN);
+    GPIO_SetBits(GPIOB, PHASE_UL_GPIO_PIN);
+}
+
+/**=============================================================================
+ * @brief           六步换相
+ *
+ * @param[in]       duty:占空比
+ *
+ * @return          none
+ *============================================================================*/
+void bsp_motor_MOS_Q43PWM(uint8_t duty)
+{
+    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    
+    TIM_SetCompare1(TIM1, 0);
+    TIM_SetCompare2(TIM1, 0);
+    TIM_SetCompare3(TIM1, compare);
+
+    GPIO_ResetBits(GPIOB, PHASE_VL_GPIO_PIN); 
+    GPIO_ResetBits(GPIOB, PHASE_WL_GPIO_PIN);
+    GPIO_SetBits(GPIOB, PHASE_UL_GPIO_PIN);
+}
+
+/**=============================================================================
+ * @brief           六步换相
+ *
+ * @param[in]       duty:占空比
+ *
+ * @return          none
+ *============================================================================*/
+void bsp_motor_MOS_Q35PWM(uint8_t duty)
+{
+    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    
+    TIM_SetCompare1(TIM1, 0);
+    TIM_SetCompare2(TIM1, 0);
+    TIM_SetCompare3(TIM1, compare);
+
+    GPIO_ResetBits(GPIOB, PHASE_UL_GPIO_PIN); 
+    GPIO_ResetBits(GPIOB, PHASE_WL_GPIO_PIN);
+    GPIO_SetBits(GPIOB, PHASE_VL_GPIO_PIN);
+}
+
+/**=============================================================================
+ * @brief           电机运行
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+void bsp_motor_start(void)
+{
+	TIM_CCxCmd(TIM1, TIM_Channel_1, TIM_CCx_Enable);
+	TIM_CCxNCmd(TIM1, TIM_Channel_1, TIM_CCxN_Enable);
+
+	TIM_CCxCmd(TIM1, TIM_Channel_2, TIM_CCx_Enable);
+	TIM_CCxNCmd(TIM1, TIM_Channel_2, TIM_CCxN_Enable);
+
+	TIM_CCxCmd(TIM1, TIM_Channel_3, TIM_CCx_Enable);
+	TIM_CCxNCmd(TIM1, TIM_Channel_3, TIM_CCxN_Enable);
+
+}
+
+/**=============================================================================
+ * @brief           电机停止
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+void bsp_motor_stop(void)
+{
+/*    
+    TIM_SetCompare1(TIM1, 0);
+    TIM_SetCompare2(TIM1, 0);
+    TIM_SetCompare3(TIM1, 0); 
+
+    GPIO_ResetBits(GPIOB, PHASE_UL_GPIO_PIN); 
+    GPIO_ResetBits(GPIOB, PHASE_VL_GPIO_PIN); 
+    GPIO_ResetBits(GPIOB, PHASE_WL_GPIO_PIN);  
+*/ 
+
+	TIM_CCxCmd(TIM1, TIM_Channel_1, TIM_CCx_Disable);
+	TIM_CCxNCmd(TIM1, TIM_Channel_1, TIM_CCxN_Disable);
+
+	TIM_CCxCmd(TIM1, TIM_Channel_2, TIM_CCx_Disable);
+	TIM_CCxNCmd(TIM1, TIM_Channel_2, TIM_CCxN_Disable);
+
+	TIM_CCxCmd(TIM1, TIM_Channel_3, TIM_CCx_Disable);
+	TIM_CCxNCmd(TIM1, TIM_Channel_3, TIM_CCxN_Disable);
+
+}
+
+/**=============================================================================
  * @brief           电机驱动初始化
  *
  * @param[in]       none
  *
  * @return          none
  *============================================================================*/
-void bsp_motor_drv_init(void)
+void bsp_motor_drv_init(bsp_motor_it_update_callback cb)
 {
     _motor_gpio_init();
     _motor_pwm_init();
+    _motor_it_update_cb = cb;
 }
