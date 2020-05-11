@@ -64,7 +64,7 @@ static void _motor_hall_commutate(void)
     
     hall.new_step = hall.level[0] + (hall.level[1] << 1) + (hall.level[2] << 2);
 
-    if (hall.new_step != hall.old_step) /*!< 转子位置变化 */
+    //if (hall.new_step != hall.old_step) /*!< 转子位置变化 */
     {
         switch (hall.new_step)
         {
@@ -111,8 +111,7 @@ static void _motor_hall_commutate(void)
  *============================================================================*/
 static void _motor_it_update_callback(void)
 {
-    //_motor_hall_commutate();
-    RTU_LOGD(LOG_TAG, "debug time it update");
+    _motor_hall_commutate();
 }
 
 /**=============================================================================
@@ -154,7 +153,8 @@ static void _user_key_run_callback(app_key_evt_t *evt)
 
     case BSP_KEY_CLICK:
         RTU_LOGI(LOG_TAG, "Click");
-        bsp_motor_start();
+        //bsp_motor_start();
+        motor.aim_duty = 20;
         break;   
 
     default:
@@ -183,6 +183,7 @@ static void _user_key_stop_callback(app_key_evt_t *evt)
 
     case BSP_KEY_CLICK:
         RTU_LOGI(LOG_TAG, "Click");
+        motor.aim_duty = 0;
         break;   
 
     default:
@@ -284,6 +285,7 @@ static void _user_key_dir_callback(app_key_evt_t *evt)
 void app_motor_init(void)
 {
     bsp_adc_init(adc_conv_result);
+    bsp_hall_init();
     bsp_motor_drv_init(_motor_it_update_callback);
 
     app_key_register_callback(BSP_KEY_NUM_RUN, _user_key_run_callback);

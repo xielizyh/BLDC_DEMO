@@ -157,11 +157,7 @@ static void _motor_pwm_init(void)
 void TIM1_UP_TIM10_IRQHandler(void)
 {
     TIM_ClearFlag(TIM1, TIM_FLAG_Update);   /*!< 清更新中断 */
-    if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)    /*!< 溢出中断 */
-    {
-        TIM_ClearITPendingBit(TIM1, TIM_IT_Update); 
-        _motor_it_update_cb();
-    }
+    _motor_it_update_cb();
 }
 
 /**=============================================================================
@@ -173,7 +169,11 @@ void TIM1_UP_TIM10_IRQHandler(void)
  *============================================================================*/
 void bsp_motor_MOS_Q51PWM(uint8_t duty)
 {
-    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    uint32_t compare = 0;
+    if (duty)
+    {
+        compare = 168000 / PWM_PREQ / 100 * duty;
+    }
     
     TIM_SetCompare2(TIM1, 0);
     TIM_SetCompare3(TIM1, 0);
@@ -193,7 +193,11 @@ void bsp_motor_MOS_Q51PWM(uint8_t duty)
  *============================================================================*/
 void bsp_motor_MOS_Q16PWM(uint8_t duty)
 {
-    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    uint32_t compare = 0;
+    if (duty)
+    {
+        compare = 168000 / PWM_PREQ / 100 * duty;
+    }
     
     TIM_SetCompare2(TIM1, 0);
     TIM_SetCompare3(TIM1, 0);
@@ -213,7 +217,11 @@ void bsp_motor_MOS_Q16PWM(uint8_t duty)
  *============================================================================*/
 void bsp_motor_MOS_Q62PWM(uint8_t duty)
 {
-    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    uint32_t compare = 0;
+    if (duty)
+    {
+        compare = 168000 / PWM_PREQ / 100 * duty;
+    }
     
     TIM_SetCompare1(TIM1, 0);
     TIM_SetCompare3(TIM1, 0);
@@ -233,7 +241,11 @@ void bsp_motor_MOS_Q62PWM(uint8_t duty)
  *============================================================================*/
 void bsp_motor_MOS_Q24PWM(uint8_t duty)
 {
-    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    uint32_t compare = 0;
+    if (duty)
+    {
+        compare = 168000 / PWM_PREQ / 100 * duty;
+    }
     
     TIM_SetCompare1(TIM1, 0);
     TIM_SetCompare3(TIM1, 0);
@@ -253,7 +265,11 @@ void bsp_motor_MOS_Q24PWM(uint8_t duty)
  *============================================================================*/
 void bsp_motor_MOS_Q43PWM(uint8_t duty)
 {
-    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    uint32_t compare = 0;
+    if (duty)
+    {
+        compare = 168000 / PWM_PREQ / 100 * duty;
+    }
     
     TIM_SetCompare1(TIM1, 0);
     TIM_SetCompare2(TIM1, 0);
@@ -273,7 +289,11 @@ void bsp_motor_MOS_Q43PWM(uint8_t duty)
  *============================================================================*/
 void bsp_motor_MOS_Q35PWM(uint8_t duty)
 {
-    uint32_t compare = 168000 / PWM_PREQ / 100 * duty - 1;
+    uint32_t compare = 0;
+    if (duty)
+    {
+        compare = 168000 / PWM_PREQ / 100 * duty;
+    }
     
     TIM_SetCompare1(TIM1, 0);
     TIM_SetCompare2(TIM1, 0);
