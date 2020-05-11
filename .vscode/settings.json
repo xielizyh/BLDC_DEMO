@@ -23,6 +23,7 @@
         "**/*.d":true,
         "**/*.crf":true,
         "OBJ/":true,
+        "SYSTEM/":true,
         "USER/DebugConfig/":true,
     },
     "files.exclude": {
@@ -32,6 +33,7 @@
         "**/*.d":true,
         "**/*.crf":true,
         "OBJ/":true,
+        "SYSTEM/":true,
         "USER/DebugConfig/":true,
     },
     "C_Cpp.errorSquiggles": "Disabled",

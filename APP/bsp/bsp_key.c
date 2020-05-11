@@ -102,5 +102,5 @@ uint8_t bsp_key_get_is_pushed(uint8_t idx)
         break;
     }
 
-    return value;
+    return value ? 1 : 0;
 }

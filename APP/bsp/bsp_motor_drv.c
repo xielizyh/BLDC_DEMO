@@ -76,6 +76,7 @@ static void _motor_gpio_init(void)
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_TIM1);
 
     /* 下桥臂GPIO配置 */
+    GPIO_InitStructure.GPIO_Pin = PHASE_UL_GPIO_PIN | PHASE_VL_GPIO_PIN | PHASE_WL_GPIO_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
@@ -155,8 +156,8 @@ static void _motor_pwm_init(void)
  *============================================================================*/
 void TIM1_UP_TIM10_IRQHandler(void)
 {
-    //TIM_ClearFlag(TIM1, TIM_FLAG_Update);
-    if (TIM_GetITStatus(TIM3,TIM_IT_Update) != RESET)    /*!< 溢出中断 */
+    TIM_ClearFlag(TIM1, TIM_FLAG_Update);   /*!< 清更新中断 */
+    if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)    /*!< 溢出中断 */
     {
         TIM_ClearITPendingBit(TIM1, TIM_IT_Update); 
         _motor_it_update_cb();

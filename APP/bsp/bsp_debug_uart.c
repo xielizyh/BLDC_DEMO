@@ -84,8 +84,8 @@ static void _uart_init(void)
 	/* 6、接收使能 */
     USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
     NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;		
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 3;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			
 	NVIC_Init(&NVIC_InitStructure);
 }
@@ -132,8 +132,8 @@ static void _dma_tx_init(void)
 	USART_DMACmd(USART1, USART_DMAReq_Tx, ENABLE);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream7_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	

@@ -46,6 +46,8 @@ int main(void)
     app_key_init();
     app_motor_init();
 
+    RTU_LOGI(LOG_TAG, "system start to run...");
+
     while (1)
 	{
         app_task_poll();

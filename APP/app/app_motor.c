@@ -134,7 +134,7 @@ void app_motor_task(void *arg)
 }
 
 /**=============================================================================
- * @brief           用户运行按键回调
+ * @brief           用户Run按键回调
  *
  * @param[in]       none
  *
@@ -163,6 +163,118 @@ static void _user_key_run_callback(app_key_evt_t *evt)
 }
 
 /**=============================================================================
+ * @brief           用户停止按键回调
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+static void _user_key_stop_callback(app_key_evt_t *evt)
+{
+    switch (evt->sta)
+    {
+    case BSP_KEY_DOWN:
+        RTU_LOGI(LOG_TAG, "Down");
+        break;
+
+    case BSP_KEY_UP:
+        RTU_LOGI(LOG_TAG, "Up");
+        break;        
+
+    case BSP_KEY_CLICK:
+        RTU_LOGI(LOG_TAG, "Click");
+        break;   
+
+    default:
+        break;    
+    }    
+}
+
+/**=============================================================================
+ * @brief           用户Up按键回调
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+static void _user_key_up_callback(app_key_evt_t *evt)
+{
+    switch (evt->sta)
+    {
+    case BSP_KEY_DOWN:
+        RTU_LOGI(LOG_TAG, "Down");
+        break;
+
+    case BSP_KEY_UP:
+        RTU_LOGI(LOG_TAG, "Up");
+        break;        
+
+    case BSP_KEY_CLICK:
+        RTU_LOGI(LOG_TAG, "Click");
+        break;   
+
+    default:
+        break;    
+    }    
+}
+
+/**=============================================================================
+ * @brief           用户Down按键回调
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+static void _user_key_down_callback(app_key_evt_t *evt)
+{
+    switch (evt->sta)
+    {
+    case BSP_KEY_DOWN:
+        RTU_LOGI(LOG_TAG, "Down");
+        break;
+
+    case BSP_KEY_UP:
+        RTU_LOGI(LOG_TAG, "Up");
+        break;        
+
+    case BSP_KEY_CLICK:
+        RTU_LOGI(LOG_TAG, "Click");
+        break;   
+
+    default:
+        break;    
+    }    
+}
+
+/**=============================================================================
+ * @brief           用户Dir按键回调
+ *
+ * @param[in]       none
+ *
+ * @return          none
+ *============================================================================*/
+static void _user_key_dir_callback(app_key_evt_t *evt)
+{
+    switch (evt->sta)
+    {
+    case BSP_KEY_DOWN:
+        RTU_LOGI(LOG_TAG, "Down");
+        break;
+
+    case BSP_KEY_UP:
+        RTU_LOGI(LOG_TAG, "Up");
+        break;        
+
+    case BSP_KEY_CLICK:
+        RTU_LOGI(LOG_TAG, "Click");
+        break;   
+
+    default:
+        break;    
+    }    
+}
+
+/**=============================================================================
  * @brief           电机初始化
  *
  * @param[in]       none
@@ -175,4 +287,8 @@ void app_motor_init(void)
     bsp_motor_drv_init(_motor_it_update_callback);
 
     app_key_register_callback(BSP_KEY_NUM_RUN, _user_key_run_callback);
+    app_key_register_callback(BSP_KEY_NUM_STOP, _user_key_stop_callback);
+    app_key_register_callback(BSP_KEY_NUM_UP, _user_key_up_callback);
+    app_key_register_callback(BSP_KEY_NUM_DOWN, _user_key_down_callback);
+    app_key_register_callback(BSP_KEY_NUM_DIR, _user_key_dir_callback);
 }
